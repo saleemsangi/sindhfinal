@@ -7,14 +7,26 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    NSError *setCategoryErr = nil;
+    NSError *activationErr  = nil;
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error:&setCategoryErr];
+    [[AVAudioSession sharedInstance] setActive:YES error:&activationErr];
+    
     return YES;
 }
+
+
+-(void)remoteControlReceivedWithEvent:(UIEvent *)event{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RemoteControlEventReceived" object:event];
+}
+
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
